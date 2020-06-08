@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teste</title>
+  <title>Diário Oficial</title>
 
   <link rel="stylesheet" href="./src/index.sass">
 
@@ -12,11 +12,17 @@
     body {
       margin: 0;
       padding: 0;
+      font: 13pt/1.3 sans-serif;
+    }
+
+    a {
+      color: currentColor;
+      text-decoration: none;
     }
 
     hr {
-      border: 0 solid;
-      border-bottom-width: 1px;
+      border: 0 solid #dce6f2;
+      border-bottom-width: 10px;
     }
 
     p, h1, h2, h3, h4, h5, h6, li {
@@ -27,17 +33,17 @@
     .page {
       display: flex;
       flex-direction: column;
-      box-sizing: content-box;
-      width: 20cm;
-      height: 28.7cm;
-      line-height: 1.25;
-      font-size: 24pt;
+      width: 24cm;
+      height: 35cm;
       page-break-inside: avoid;
     }
 
+    .page > * {
+      padding: .5cm;
+    }
+
     .page-content {
-      padding-bottom: 1em;
-      box-sizing: border-box;
+      padding-bottom: .5em;
       flex: 1 1 auto;
       overflow: hidden;
     }
@@ -49,35 +55,124 @@
     .page-content > :last-child {
         margin-bottom: 0;
     }
+
+    .summary {
+      height: 100%;
+      background-color: #dce6f2;
+      border: 1px solid;
+    }
+
+    .summary table {
+      width: 100%;
+      padding: 1cm .5cm;
+    }
+
+    .summary caption {
+      display: block;
+      background-color: #dce6f2;
+      font-weight: bold;
+      letter-spacing: 1pt;
+    }
+
+    .summary td {
+      padding-top: 3pt;
+      padding-bottom: 3pt;
+    }
+
+    .section-title {
+      display: block;
+      padding: 5pt;
+      font-size: 15pt;
+      font-weight: bold;
+      text-align: center;
+      background-color: #dce6f2;
+      border: 1px solid;
+    }
   </style>
 </head>
 
 <body>
   <div id="app">
-    <header id="main-header">
-      <table>
+    <header id="main-header" style="text-align: center;">
+      <table width="100%">
         <tr>
           <td>
-            <img src="">
+            <img src="https://taquaritinga.sp.gov.br/Content/img/brasao.png" height="160">
           </td>
           <td>
-            <h1>Diário Oficial</h1>
-            <h2>Município de Taquaritinga</h2>
+            <h1 style="text-transform: uppercase; font-size: 2.3cm; line-height: 1; margin: 0;">
+              Diário Oficial
+            </h1>
+            <h2 style="text-transform: uppercase;font-size: 1cm;">
+              Município de Taquaritinga
+            </h2>
+            <p style="text-align: right;">
+              Conforme Lei Municipal nº 4.081, de 08 de novembro de 2013
+            </p>
           </td>
         </tr>
       </table>
-    </header>
-
-    <footer id="main-footer"></footer>
-
-    <header id="page-header">
-      <p>Hello, header</p>
+      <div style="text-align: center; background-color: #dce6f2; padding: 5px;">
+          <small>
+            <a href="http://www.taquaritinga.sp.gov.br">www.taquaritinga.sp.gov.br</a>
+            |
+            <a href="http://www.imprensaoficialmunicipal.com.br/taquaritinga">www.imprensaoficialmunicipal.com.br/taquaritinga</a>
+          </small>
+      </div>
+      <table style="width: 100%; margin-top: 6pt;">
+        <tr>
+          <td style="width: 30%; text-align: left;">[[data]]</td>
+          <td style="width: 30%; text-align: center;">Ano [[ano]] Edição [[edicao]]</td>
+          <td style="width: 30%; text-align: right;">Página {{pagina}} de {{totalPaginas}}</td>
+        </tr>
+      </table>
       <hr>
     </header>
 
-    <footer id="page-footer">
+    <footer id="main-footer" style="font-size: 12pt; padding-bottom: 5cm;">
+    </footer>
+
+    <header id="page-header" style="text-align: center;">
+      <table width="100%">
+        <tr>
+          <td>
+            <img src="https://taquaritinga.sp.gov.br/Content/img/brasao.png" height="160">
+          </td>
+          <td>
+            <h1 style="text-transform: uppercase; font-size: 2.3cm; line-height: 1; margin: 0;">
+              Diário Oficial
+            </h1>
+            <h2 style="text-transform: uppercase;font-size: 1cm;">
+              Município de Taquaritinga
+            </h2>
+            <p style="text-align: right;">
+              Conforme Lei Municipal nº 4.081, de 08 de novembro de 2013
+            </p>
+          </td>
+        </tr>
+      </table>
+      <div style="text-align: center; background-color: #dce6f2; padding: 5px;">
+        <small>
+          www.taquaritinga.sp.gov.br | www.imprensaoficialmunicipal.com.br/taquaritinga
+        </small>
+      </div>
+      <table style="width: 100%; margin-top: 6pt;">
+        <tr>
+          <td style="width: 30%; text-align: left;">[[data]]</td>
+          <td style="width: 30%; text-align: center;">Ano [[ano]] Edição [[edicao]]</td>
+          <td style="width: 30%; text-align: right;">Página {{pagina}} de {{totalPaginas}}</td>
+        </tr>
+      </table>
       <hr>
-      <p>Hello, footer</p>
+    </header>
+
+    <footer id="page-footer" style="text-align: center; font-size: 10.5pt;">
+      <hr>
+      <p>
+        Município de Taquaritinga – Estado de São Paulo
+        <br>
+        Diário Oficial assinado digitalmente conforme MP nº 2.200-2, de 2001, garantindo autenticidade, validade jurídica e integridade.
+      </p>
     </footer>
 
     <section class="doc-section" id="what">

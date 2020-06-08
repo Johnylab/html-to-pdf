@@ -59,19 +59,23 @@ const splitContent = (content) => {
   return nextElement.innerHTML;
 };
 
-const createPage = (pageNum, header, footer) => {
+const createPage = (pageHeader, pageFooter) => {
   const container = document.createElement('div');
   container.className = 'page';
   const content = document.createElement('div');
   content.className = 'page-content';
-  container.appendChild(header.cloneNode(true));
+  const header = pageHeader.cloneNode(true);
+  header.removeAttribute('id');
+  const footer = pageFooter.cloneNode(true);
+  footer.removeAttribute('id');
+
+  container.appendChild(header);
   container.appendChild(content);
-  container.appendChild(footer.cloneNode(true));
+  container.appendChild(footer);
 
   return {
     container,
     content,
-    pageNum,
     append: (html) => {
       content.innerHTML += html.trim();
       return splitContent(content);
@@ -100,7 +104,7 @@ const pages = {
     const pageNum = this.state.length;
     const header = pageNum ? this.pageHeader : this.mainHeader;
     const footer = pageNum ? this.pageFooter : this.mainFooter;
-    const page = createPage(pageNum + 1, header, footer);
+    const page = createPage(header, footer);
     this.state.push(page);
     this.root.appendChild(page.container);
     return page;
@@ -113,53 +117,75 @@ const pages = {
 
     let page = this.addPage();
 
-    const sections = this.sectionElements.map((section) => {
-      const titleElement = section.querySelector('.section-title');
-      const title = titleElement && titleElement.textContent.trim();
-      const { pageNum } = page;
-      const nextContent = page.append(section.innerHTML);
-
-      if (nextContent) {
+    this.sectionElements.forEach((section) => {
+      let nextContent = page.append(section.innerHTML);
+      while (nextContent) {
         page = pages.addPage();
-        page.append(nextContent);
+        nextContent = page.append(nextContent);
       }
-
-      return { title, pageNum };
     });
 
+    const nonPrintableChars = /[\000-\031]+/gi;
+
+    const sections = pages.state.reduce((arr, { content }, index) => {
+      const titles = [...content.querySelectorAll('.section-title')]
+        .map((el) => el.textContent.trim().replace(nonPrintableChars, ''))
+        .map((title) => ({ title, pageNum: index + 1 }));
+      return [...arr, ...titles];
+    }, []);
+
     summary.content.innerHTML = /* html */`
-<ul style="margin: 0; padding: 0;">
-  ${sections.map(({ title, pageNum }) => /* html */`
-    <li style="display: flex;">
-      <span>${title}</span>
-      <span style="flex: 1 1 auto;"></span>
-      <span>${pageNum}</span>
-    </li>
-  `).join('')}
-</ul>
+      <div class="summary">
+        <table>
+          <caption>SUMÁRIO</caption>
+          ${sections.map(({ title, pageNum }) => /* html */`
+            <tr>
+              <td width="100%">${title}</td>
+              <td width="1%">${pageNum}</td>
+            </tr>
+          `).join('')}
+        </table>
+      </div>
     `;
+
+    const contents = pages.state
+      .map(({ container }) => container)
+      .reduce((arr, container) => {
+        const templates = [...container.children].filter((element) => (
+          element.textContent.includes('{{pagina}}')
+          || element.textContent.includes('{{totalPaginas}}')
+        ));
+        return [...arr, ...templates];
+      }, [])
+      .forEach((el, index) => {
+        const { innerHTML } = el;
+        // eslint-disable-next-line no-param-reassign
+        el.innerHTML = innerHTML
+          .replace('{{pagina}}', index + 1)
+          .replace('{{totalPaginas}}', pages.state.length);
+      });
+
+    console.log(contents);
   },
 };
 
 pages.init();
 
-const copyToClipboard = (str) => {
-  const el = document.createElement('textarea');
-  el.value = str;
-  document.body.appendChild(el);
-  el.select();
-  document.execCommand('copy');
-  document.body.removeChild(el);
-};
+// const gerarPDF = (str) => {
+//   const el = document.createElement('textarea');
+//   el.setAttribute('name', 'codigo');
+//   const form = document.createElement('form');
+//   form.method = 'post';
+//   form.action = 'GerarPDF.aspx';
+//   el.value = str;
+//   form.appendChild(el);
+//   document.body.appendChild(form);
+//   form.submit();
+//   document.body.removeChild(form);
+// };
 
-window.addEventListener('keypress', (e) => {
-  const charCode = e.keyCode || e.which;
-
-  if (String.fromCharCode(charCode) === 'p') {
-    const root = document.documentElement.cloneNode(true);
-    [...root.querySelectorAll('script, link')].forEach((s) => s.remove());
-    copyToClipboard(root.innerHTML);
-    // eslint-disable-next-line no-alert
-    alert('Código copiado para a área de transferência.');
-  }
-});
+// window.addEventListener('load', () => {
+//   const root = document.documentElement.cloneNode(true);
+//   [...root.querySelectorAll('script, link')].forEach((s) => s.remove());
+//   gerarPDF(root.outerHTML);
+// });
