@@ -148,7 +148,7 @@ const pages = {
       </div>
     `;
 
-    const contents = pages.state
+    pages.state
       .map(({ container }) => container)
       .reduce((arr, container) => {
         const templates = [...container.children].filter((element) => (
@@ -164,28 +164,7 @@ const pages = {
           .replace('{{pagina}}', index + 1)
           .replace('{{totalPaginas}}', pages.state.length);
       });
-
-    console.log(contents);
   },
 };
 
 pages.init();
-
-// const gerarPDF = (str) => {
-//   const el = document.createElement('textarea');
-//   el.setAttribute('name', 'codigo');
-//   const form = document.createElement('form');
-//   form.method = 'post';
-//   form.action = 'GerarPDF.aspx';
-//   el.value = str;
-//   form.appendChild(el);
-//   document.body.appendChild(form);
-//   form.submit();
-//   document.body.removeChild(form);
-// };
-
-// window.addEventListener('load', () => {
-//   const root = document.documentElement.cloneNode(true);
-//   [...root.querySelectorAll('script, link')].forEach((s) => s.remove());
-//   gerarPDF(root.outerHTML);
-// });

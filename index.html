@@ -241,6 +241,28 @@
   </div>
 
   <script src="./src/index.js"></script>
+
+  <script>
+    const gerarPDF = () => {
+      const root = document.documentElement.cloneNode(true);
+      [...root.querySelectorAll('script, link')].forEach((s) => s.remove());
+    
+      const textarea = document.createElement('textarea');
+      textarea.setAttribute('name', 'codigo');
+      textarea.value = root.outerHTML;
+    
+      const form = document.createElement('form');
+      form.method = 'post';
+      form.action = 'GerarPDF.aspx';
+      form.appendChild(textarea);
+    
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+    };
+
+    // window.addEventListener('load', gerarPDF);
+  </script>
 </body>
 
 </html>

@@ -7,6 +7,14 @@
 			"problemMatcher": [],
 			"label": "Parcel Start",
 			"detail": "parcel index.html"
+		},
+		{
+			"type": "npm",
+			"script": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build",
+			"detail": "parcel build index.html --no-minify"
 		}
 	]
 }
