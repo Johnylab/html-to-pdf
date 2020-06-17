@@ -11,7 +11,14 @@ const splitContent = (content) => {
   let cloneChild;
 
   while (content.scrollHeight > content.clientHeight) {
-    if (content.lastChild.clientHeight >= content.clientHeight) {
+    if (
+      content.lastChild.offsetHeight >= content.clientHeight
+      && (
+        !content.innerHTML || [...content.children].find((el) => (
+          !el.innerHTML && el.offsetHeight > content.clientHeight
+        ))
+      )
+    ) {
       break;
     }
     lastChild = content.lastChild;
