@@ -7,6 +7,7 @@ const pages = {
     this.mainFooter = this.root.querySelector('#main-footer');
     this.pageHeader = this.root.querySelector('#page-header');
     this.pageFooter = this.root.querySelector('#page-footer');
+    this.firstPage = this.root.querySelector('#cover');
     this.sectionElements = [...this.root.querySelectorAll('.doc-section')];
     this.render();
   },
@@ -30,7 +31,8 @@ const pages = {
     this.state = [];
     this.root.innerHTML = '';
 
-    const summary = this.addPage();
+    const cover = this.addPage();
+    cover.content.innerHTML = this.firstPage.innerHTML;
 
     let page = this.addPage();
 
@@ -51,18 +53,16 @@ const pages = {
       return [...arr, ...titles];
     }, []);
 
-    summary.content.innerHTML = /* html */`
-      <div class="summary">
-        <table>
-          <caption>SUMÁRIO</caption>
-          ${sections.map(({ title, pageNum }) => /* html */`
-            <tr>
-              <td width="100%">${title}</td>
-              <td width="1%">${pageNum}</td>
-            </tr>
-          `).join('')}
-        </table>
-      </div>
+    const summary = cover.content.querySelector('#sumario');
+    summary.innerHTML += `
+      <table>
+        ${sections.map(({ title, pageNum }) => /* html */`
+          <tr>
+            <td width="100%">${title}</td>
+            <td width="1%">${pageNum}</td>
+          </tr>
+        `).join('')}
+      </table>
     `;
 
     pages.state
