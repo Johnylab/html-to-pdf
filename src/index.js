@@ -1,7 +1,9 @@
 const splitHtml = (el) => {
   const tokens = [];
   for (let node = el.firstChild; node; node = node.nextSibling) {
-    if (node.nodeType === Node.TEXT_NODE) {
+    if (node.nodeName.toLowerCase() === 'tbody') {
+      [...node.children].forEach((k) => tokens.push(k.outerHTML));
+    } else if (node.nodeType === Node.TEXT_NODE) {
       tokens.push(...node.textContent.trim().split(' '));
     } else if (node.nodeType === Node.ELEMENT_NODE) {
       tokens.push(node.outerHTML);
